@@ -1,0 +1,20 @@
+name: GitHub Actions Demo
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Add new custom env
+        run: |
+          echo "LINES=$(cat coverage.txt | awk '/^Lines/ { print $2 }')" >> $GITHUB_ENV
+        shell: bash
+      - uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+             Lines: ${{ env.LINES }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+          allow-repeats: false # This is the default
+
